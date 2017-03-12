@@ -52,4 +52,9 @@ public class BaseEntity {
         return (id == null) ? 0 : id;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Entity of type %s with id: %s", getClass().getName(), getId());
+    }
+
 }

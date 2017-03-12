@@ -1,5 +1,8 @@
 package ru.javawebinar.votingsystem.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
@@ -9,21 +12,21 @@ import java.sql.Date;
  */
 @Entity
 @Table(name = "votes",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"user", "date"}, name = "votes_unique_date_user_idx")})
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date"}, name = "votes_unique_date_user_idx")})
 public class Vote extends BaseEntity {
 
     @Column(name = "date")
     @NotNull
     private Date date;
 
-    @CollectionTable(name = "users", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "user")
-    @ElementCollection(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @CollectionTable(name = "restaurant", joinColumns = @JoinColumn(name = "restaurant_id"))
-    @Column(name = "restaurant")
-    @ElementCollection(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
     public Vote(Integer id, Date date, User user, Restaurant restaurant) {

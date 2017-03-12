@@ -7,21 +7,28 @@ import java.util.TimeZone;
 /**
  * Created by smac on 10.01.17.
  */
+@Entity
 @Table(name = "restaurants")
 public class Restaurant extends NamedEntity {
 
     @Column(name = "time_zone")
     TimeZone timeZone;
 
-    @CollectionTable(name = "dishes", joinColumns = @JoinColumn(name = "restaurant_id"))
-    @Column(name = "menu_of_the_day")
-    @ElementCollection(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     private Set<Dish> menuOfTheDay;
 
     public Restaurant(Integer id, String name, TimeZone timeZone, Set<Dish> menuOfTheDay) {
         super(id, name);
         this.timeZone = timeZone;
         this.menuOfTheDay = menuOfTheDay;
+    }
+
+    public Restaurant(TimeZone timeZone, Set<Dish> menuOfTheDay) {
+        this.timeZone = timeZone;
+        this.menuOfTheDay = menuOfTheDay;
+    }
+
+    public Restaurant() {
     }
 
     public TimeZone getTimeZone() {
@@ -39,5 +46,7 @@ public class Restaurant extends NamedEntity {
     public void setMenuOfTheDay(Set<Dish> menuOfTheDay) {
         this.menuOfTheDay = menuOfTheDay;
     }
+
+
 }
 
